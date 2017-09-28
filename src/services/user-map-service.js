@@ -14,7 +14,10 @@ const defaultIcon = icon({
   iconSize: [24, 36],
   iconAnchor: [12, 36],
 });
-
+const defaultView = {
+  coords: [55.942, -3.21],
+  zoom: 3
+}
 const userIcon = username =>
   divIcon({
     popupAnchor: [0, -20],
@@ -32,8 +35,15 @@ export const initMap = (hostId) => {
     minZoom: 3,
     maxZoom: 18,
   });
-
-  userMap.setView([55.942, -3.21], 3);
+  //gets query params for lat & lng
+  const searchParams = new URLSearchParams(window.location.search)
+  // is Number check
+  const lat = !isNaN(searchParams.get('lat')) ? searchParams.get('lat') : undefined
+  const lng = !isNaN(searchParams.get('lng')) ? searchParams.get('lng') : undefined
+  const paramCoords = [lat, lng]
+  // if not undefined, set as view, else, use default
+  lat && lng ? userMap.setView(paramCoords, 11) :
+    userMap.setView(defaultView.coords, defaultView.zoom);
   userMap.addLayer(tiles);
 };
 
